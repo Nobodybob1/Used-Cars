@@ -35,10 +35,8 @@ class Rmbr_searchController extends Controller
      */
     public function store(Request $request)
     {
-        //$formFields = $request->validate();
         
         $request['user_id'] = auth()->id();
-        //dd($request->request->all());
         
 
         Rmbr_search::create($request->request->all());
@@ -87,6 +85,17 @@ class Rmbr_searchController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $search = Rmbr_search::findOrFail($id);
+        if(auth()->user()->id != $search->user_id){
+            return back();
+        }
+        $search->delete();
+        return redirect('/search_list');
+    }
+
+    public function my_searches(){
+
+        return view('saves_searches', ['my_searches' => auth()->user()->rmbr_searches()->get()]);
+
     }
 }

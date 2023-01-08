@@ -22,9 +22,9 @@
             </div>
             <nav id="nav">
                 <ul>
-                    <li><a href=" {{ url('/admin/index') }}">Početna</a></li>
-                    <li><a href="{{ url('/admin/on_hold')}}">Oglasi na cekanju</a></li>
-                    <li><a href="{{ url('/admin/users')}}">Korisnici</a></li>
+                    <li><a href=" {{ url('/') }}">Početna</a></li>
+                    <li><a href="{{ url('/search_list')}}">Pretraga</a></li>
+                    <li><a href="https://autoblog.rs/" target="blank">Vesti</a></li>
                         <li>
                             <div>
                                 <a href="/profile"> Dobrodošli, {{auth()->user()->name}} </a>
@@ -34,49 +34,45 @@
             </nav>
         </header>
         <main>
-            <form class ="search" action="/admin/on_hold/" method="POST">
-                <section class="search">
-                    
-                    <h1>Dobrodošli na UsedCars stranicu!</h1>
-                    <label htmlFor="search-bar">Izaberi kriterijum za pretragu: </label>
-                    
-                    <select id="search-bar" name="tags" class="search-select">
-                        <option value="brand" default>Marka vozila</option>
-                        <option value="type">Tip vozila</option>
-                        <option value="manuf_year">Godina proizvodnje</option>
-                        <option value="kilometers">Pređeni kilometri</option>
-                        <option value="price">Cena</option>
-                        <option value="drive_type">Vrsta pogona</option>
-                        <option value="shifter_type">Vrsta menjača</option>
-                    </select>
-    
-                            <div class="search-text">
-                                <input type="text" name="search_input" id="search-input" />
-                                <button type="submit" class="login-btn">Pretraži</button>
-                            </div>
-                        
-                </section>
-            </form>
+            
             <section class="car-ads">
-                <h1>Oglasi</h1>
-                <div class="car-ads-grid">
-                    @unless ($listings->isEmpty())
-                        @foreach ($listings as $listing)
-                            <div class="car-ad">
-                                <img src=" {{asset('storage/uploads/'. $listing->imgpath)}} " alt="A car">
-                                <div class="car-desc">
-                                    <div class="car-name-price">
-                                        <h2 class="car-name">{{$listing->band.$listing->type}}</h2>
-                                        <p class="car-price">{{$listing->price}}</p>
+                <h1>Pretrage</h1>
+                <ul style="list-style: none;">
+                    
+                         @unless ($my_searches->isEmpty())
+                        @foreach ($my_searches as $search)
+                            <li>
+                                <div class="searches">
+                                
+                                    <div class="saved-search">
+                                        <div class="saved-search-grid">
+                                            <p>Stanje: {{$search->state}}</p>
+                                            <p>Marka: {{$search->brand}}</p>
+                                            <p>Model: {{$search->type}}</p>
+                                            <p>Godište: {{$search->manuf_year}}.</p>
+                                            <p>Kilometraža: {{$search->kilometers}}km</p>
+                                            <p>Cena: {{$search->price}}</p>
+                                            <p>Gorivo: {{$search->fuel_type}}</p>
+                                            <p>Kubikaža: {{$search->motor_cc}}cm3</p>
+                                            <p>Snaga motora: {{$search->horse_power}}</p>
+                                            <p>Vrsta pogona: {{$search->drive}}</p>
+                                            <p>Menjač: {{$search->shift_type}}</p>
+                                            <p>Broj vrata: {{$search->no_doors}}</p>    
+                                        </div>
+                                        <button class="btn btn-danger" onclick="window.location.href='http://localhost:8000/delete_search/{{$search->id}}'">Izbrisi pretragu</button>
                                     </div>
-                                    <p class="car-details">{{$listing->fuel_type}}</p>
+                                        {{-- <a href="/deletepost/{{$search->id}}">Obrisi pretragu</a> --}}
                                 </div>
-                                    <div class="btn-div">
-                                        <button class="btn btn-success" onclick="window.location.href='http://localhost:8000/approve/{{$listing->id}}'">Odobri oglas</button>
-                                    </div>
-                            </div>
+                            </li>
+                            
                         @endforeach
+                        
                     @endunless
+                    
+                    
+                </ul>
+                    
+                    
             </section>
             {{-- <div class="mt-6 p-4">
                 {{$listings->links()}}
@@ -97,7 +93,7 @@
             </div>
             <div class="contact">
                 <div class="contact-info">
-                    <a href="/admin/index">Oglasi</a>
+                    <a href="/">Oglasi</a>
                     <a href="/register" class="login-btn">Registruj se</a>
                 </div>
                 <div class="contact-sections">
@@ -114,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            <p>©2023 UsedCars.com, sva prava zadržana.</p>
+            <p>©2022 UsedCars.com, sva prava zadržana.</p>
         </footer>
     </body>
 </html>
