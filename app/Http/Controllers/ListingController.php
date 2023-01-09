@@ -10,6 +10,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ListingController extends Controller
 {
@@ -127,6 +128,7 @@ class ListingController extends Controller
      */
     public function destroy($id)
     {   
+        
         if(auth()->user()->is_admin){
             Listing::whereId($id)->delete();
         }
@@ -228,7 +230,7 @@ class ListingController extends Controller
             if($request->motor_cc){
                 $query->where('no_doors', 'like', '%' . $request->no_doors . '%');
             }
-        })->get();
+        })->paginate(10);
 
         return view('index', ['listings'=> $listings]);
     }
@@ -288,7 +290,7 @@ class ListingController extends Controller
             if($my_search->motor_cc){
                 $query->where('no_doors', 'like', '%' . $my_search->no_doors . '%');
             }
-        })->get();
+        })->paginate(10);
 
         return view('index', ['listings'=> $listings]);
     }
